@@ -20,7 +20,11 @@ async function main () {
 
 	// force downloading files one by one
 	for (var i = 0; i < communes.length; i++) {
-		await downloadCommuneData(communes[i])
+		try {
+			await downloadCommuneData(communes[i])
+		} catch (e) {
+			console.error(e)
+		}
 	}
 	return Promise.resolve('finished')
 }
