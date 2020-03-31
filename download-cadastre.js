@@ -2,7 +2,7 @@ require('dotenv').config()
 const {join} = require('path')
 const https = require('https')
 var fs = require('fs-extra');
-const {getCodeDepartement} = require('./lib/recog')
+const {getCodeDepartement, getAllCodesCommunes} = require('./lib/recog')
 
 const arrondissementsMunicipaux = require('@etalab/decoupage-administratif/data/communes.json')
   .map(c => c.code)
@@ -21,7 +21,10 @@ async function main () {
 	// force downloading files one by one
 	for (var i = 0; i < communes.length; i++) {
 		try {
-			await downloadCommuneData(communes[i])
+	        const codesCommunes = getAllCodesCommunes(communes[i])
+	        for (var j = 0; j < codesCommunes.length; j++) {
+				await downloadCommuneData(codesCommunes[j])
+	        }
 		} catch (e) {
 			console.error(e)
 		}
